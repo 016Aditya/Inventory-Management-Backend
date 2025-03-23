@@ -25,18 +25,19 @@ model Categories {
 }
 
 model Products {
-  product_id  Int       @id @default(autoincrement())
+  product_id  String    @id @default(uuid()) // UUID as primary key
   name        String
   description String?
-  category_id Int
-  price       String
+  categoryId  Int
+  price       Decimal
   sku         String
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
 
-  category   Categories @relation(fields: [category_id], references: [category_id])
+  category   Categories @relation(fields: [categoryId], references: [category_id])
   inventory  Inventory[]
 }
+
 
 model Warehouses {
   warehouse_id Int      @id @default(autoincrement())
@@ -49,7 +50,7 @@ model Warehouses {
 
 model Inventory {
   inventory_id Int      @id @default(autoincrement())
-  product_id   Int
+  product_id   String  // Change Int -> String (UUID)
   warehouse_id Int
   quantity     Int
   updated_at   DateTime @updatedAt

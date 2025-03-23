@@ -1,6 +1,6 @@
 import prisma from '../config/prisma.js';
 
-export const insertCategory = async (req, res) => {
+export const insertCategory = async (req, res) => { 
     try {
 
         const { category_name } = req.body;
