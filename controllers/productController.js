@@ -59,3 +59,32 @@ export const deleteProduct = async (req, res) => {
     }
 };
 
+export const editProduct = async (req, res) => {
+  const { product_id } = req.params;
+  const { name, description, category_id, price, sku } = req.body;
+
+  // Create a data object and only add fields that are provided
+  const updateData = {};
+  if (name !== undefined) updateData.name = name;
+  if (description !== undefined) updateData.description = description;
+  if (category_id !== undefined) updateData.category_id = category_id;
+  if (price !== undefined) updateData.price = price;
+  if (sku !== undefined) updateData.sku = sku;
+  updateData.updated_at = new Date();
+
+  if (Object.keys(updateData).length === 1) { // only updated_at present
+    return res.status(400).json({ error: 'No fields provided to update' });
+  }
+
+  try {
+    const updatedProduct = await prisma.products.update({
+      where: { product_id: product_id },
+      data: updateData,
+    });
+
+    res.json({ message: 'Product updated successfully', product: updatedProduct });
+  } catch (error) {
+    console.error('Error updating product:', error);
+    res.status(500).json({ error: 'Failed to update product' });
+  }
+};
