@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import categoryRouter from './routes/categoryRouter.js';
 import productRouter from './routes/productRouter.js';
 import warehouseRouter from './routes/warehouseRouter.js';
+import inventoryRouter from './routes/inventoryRouter.js';
 
 dotenv.config(); // Load environment variables
 const app = express();
@@ -18,6 +19,9 @@ app.use('/api/categories', categoryRouter);
 app.use('/api/products', productRouter);
 
 app.use('/api/warehouse', warehouseRouter);
+
+app.use('/api/inventory', inventoryRouter);
+
 
 
 // Start the server

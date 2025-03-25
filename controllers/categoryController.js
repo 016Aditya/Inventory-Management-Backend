@@ -47,3 +47,27 @@ export const deleteCategory = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+export const updateCategory = async (req, res) => {
+    try {
+        const { category_id } = req.body;
+        const { category_name } = req.body;
+
+        if (!category_name) {
+            return res.status(400).json({ message: 'Category name is required' });
+        }
+
+        const updatedCategory = await prisma.category.update({
+            where: { category_id: parseInt(id) },
+            data: { category_name },
+        });
+
+        res.status(200).json({
+            message: 'Category updated successfully',
+            updatedCategory,
+        });
+    } catch (error) {
+        console.error('Error updating category:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
