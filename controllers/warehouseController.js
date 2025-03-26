@@ -49,3 +49,22 @@ export const deleteWarehouse = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+export const getWarehouseById = async (req, res) => {
+    try {
+      const { warehouse_id } = req.body;
+      const warehouse = await prisma.warehouses.findUnique({
+        where: { warehouse_id: warehouse_id },
+      });
+  
+      if (!warehouse) {
+        return res.status(404).json({ error: 'Warehouse not found' });
+      }
+  
+      res.json({ warehouse });
+    } catch (error) {
+      console.error('Error fetching warehouse:', error);
+      res.status(500).json({ error: 'Failed to retrieve warehouse' });
+    }
+  };
+  
