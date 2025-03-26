@@ -41,3 +41,33 @@ export const insertInventory = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+export const deleteInventory = async (req, res) => {
+    try {
+        const { inventory_id } = req.body;
+
+        if (!inventory_id) {
+            return res.status(400).json({ message: 'inventoryId is required in the request body' });
+        }
+
+        // Check if inventory exists
+        const inventoryExists = await prisma.inventory.findUnique({
+            where: { inventory_id: parseInt(inventory_id) },
+        });
+
+        if (!inventoryExists) {
+            return res.status(404).json({ message: 'Inventory not found' });
+        }
+
+        // Delete inventory
+        await prisma.inventory.delete({
+            where: { inventory_id: parseInt(inventory_id) },
+        });
+
+        res.status(200).json({ message: 'Inventory deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting inventory:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
