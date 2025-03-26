@@ -71,3 +71,25 @@ export const deleteInventory = async (req, res) => {
     }
 };
 
+export const getInventoryById = async (req, res) => {
+    try {
+      const { inventory_id } = req.body;
+  
+      if (!inventory_id) {
+        return res.status(400).json({ error: 'inventory_id is required in the request body' });
+      }
+  
+      const inventory = await prisma.inventory.findUnique({
+        where: { inventory_id: parseInt(inventory_id) },
+      });
+  
+      if (!inventory) {
+        return res.status(404).json({ error: 'Inventory not found' });
+      }
+  
+      res.json({ inventory });
+    } catch (error) {
+      console.error('Error fetching inventory:', error);
+      res.status(500).json({ error: 'Failed to retrieve inventory' });
+    }
+  };
