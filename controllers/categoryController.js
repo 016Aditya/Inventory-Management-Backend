@@ -57,8 +57,8 @@ export const updateCategory = async (req, res) => {
             return res.status(400).json({ message: 'Category name is required' });
         }
 
-        const updatedCategory = await prisma.category.update({
-            where: { category_id: parseInt(id) },
+        const updatedCategory = await prisma.categories.update({
+            where: { category_id: parseInt(category_id) },
             data: { category_name },
         });
 
@@ -70,4 +70,28 @@ export const updateCategory = async (req, res) => {
         console.error('Error updating category:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
+};
+
+
+export const getCategoryById = async (req, res) => {
+  try {
+    const { category_id } = req.params;  // ✅ Use params instead of body
+
+    if (!category_id) {
+      return res.status(400).json({ error: 'Category ID is required' });
+    }
+
+    const category = await prisma.categories.findUnique({
+      where: { category_id: parseInt(category_id) },
+    });
+
+    if (!category) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+
+    res.json({ category });
+  } catch (error) {
+    console.error('Error fetching category:', error);
+    res.status(500).json({ error: 'Failed to retrieve category' });
+  }
 };
