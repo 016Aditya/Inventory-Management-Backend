@@ -95,3 +95,13 @@ export const getCategoryById = async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve category' });
   }
 };
+
+export const getCategories = async (req, res) => {
+    try {
+      const categories = await prisma.categories.findMany();
+      res.json({ categories });
+    } catch (error) {
+      console.error('Error fetching all categories:', error);
+      res.status(500).json({ error: 'Failed to retrieve categories' });
+    }
+  };
