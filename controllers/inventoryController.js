@@ -93,3 +93,14 @@ export const getInventoryById = async (req, res) => {
       res.status(500).json({ error: 'Failed to retrieve inventory' });
     }
   };
+
+  export const getInventories = async (req, res) => {
+    try {
+      const inventories = await prisma.inventory.findMany();
+      res.json({ inventories });
+    } catch (error) {
+      console.error('Error fetching all inventories:', error);
+      res.status(500).json({ error: 'Failed to retrieve inventories' });
+    }
+  };
+  
